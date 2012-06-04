@@ -12,6 +12,10 @@ import javax.swing.SwingUtilities;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import javax.swing.JMenuBar;
+import javax.swing.JButton;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class sequencerFrame
 {
@@ -55,11 +59,21 @@ public class sequencerFrame
     private void initialize()
     {
         frame = new JFrame();
-        frame.setBounds(100, 100, 535, 510);
+        frame.setBounds(100, 100, 630, 510);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         final Grid panel = new Grid(8,8);
         frame.getContentPane().add(panel, BorderLayout.CENTER);
-        panel.setBounds(100,40,300,200);
+        frame.getContentPane().setLayout(null);
+
+        JButton btnExecute = new JButton("execute");
+        btnExecute.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent arg0) {
+                //This is the sequence brah
+            }
+        });
+        btnExecute.setBounds(525, 11, 89, 23);
+        frame.getContentPane().add(btnExecute);
+        panel.setBounds(0,0,500,510);
         panel.setBackground(new java.awt.Color(255,255,255));
 
         frame.getContentPane().addMouseListener(new MouseAdapter()
@@ -69,7 +83,7 @@ public class sequencerFrame
             {
                 PointerInfo pi = MouseInfo.getPointerInfo();
                 Point point = new Point(pi.getLocation());
-                SwingUtilities.convertPointFromScreen(point, e.getComponent());
+                SwingUtilities.convertPointFromScreen(point, panel);
                 mousePos[0] = (int)point.getX();
                 mousePos[1] = (int)point.getY();
                 panel.repaint();

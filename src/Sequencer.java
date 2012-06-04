@@ -58,11 +58,11 @@ public class Sequencer{
 
         int ticks=0;
         int tickLength=16;
-        String playing = "Should be playing: ";
+       // String playing = "Should be playing: ";
         for(int row = 0; row<grid.length; row++){
             for(int col = 0; col<grid[row].length; col++){
                 if(grid[row][col]){
-                    playing += scale[row]+" ";
+                    //playing += scale[row]+" ";
                     on.setMessage(ShortMessage.NOTE_ON,  0, scale[row], velocity);
                     off.setMessage(ShortMessage.NOTE_OFF, 0, scale[row], velocity);
                     track.add(new MidiEvent(on, ticks));
@@ -75,10 +75,10 @@ public class Sequencer{
                     //track.add(new MidiEvent(off, ticks+tickLength));
                 }
             }
-            playing+="\nthen: ";
+           // playing+="\nthen: ";
             ticks+=tickLength;
         }
-        System.out.print(playing);
+        //System.out.print(playing);
 
 
     }

@@ -22,6 +22,19 @@ public class sequencerFrame
 
     private JFrame frame;
     private static int[] mousePos;
+    private static Sequencer seq;
+    private static int[] scale = {50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61};
+    private static boolean[][] doa={
+            {false, false, false, false, false, false, false, false},
+            {false, false, false, false, false, false, false, false},
+            {false, false, false, false, false, false, false, false},
+            {false, false, false, false, false, false, false, false},
+            {false, false, false, false, false, false, false, false},
+            {false, false, false, false, false, false, false, false},
+            {false, false, false, false, false, false, false, false},
+            {false, false, false, false, false, false, false, false}
+    };
+
 
     /**
      * Launch the application.
@@ -64,11 +77,13 @@ public class sequencerFrame
         final Grid panel = new Grid(8,8);
         frame.getContentPane().add(panel, BorderLayout.CENTER);
         frame.getContentPane().setLayout(null);
+        seq = new Sequencer(doa, 0, scale, 0, 128, true);
 
         JButton btnExecute = new JButton("execute");
         btnExecute.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent arg0) {
                 //This is the sequence brah
+                seq.playSequence();
             }
         });
         btnExecute.setBounds(525, 11, 89, 23);
@@ -100,16 +115,7 @@ public class sequencerFrame
         int iBoundMin;
         int kBoundMax;
         int kBoundMin;
-        boolean[][] doa={
-                {false, false, false, false, false, false, false, false},
-                {false, false, false, false, false, false, false, false},
-                {false, false, false, false, false, false, false, false},
-                {false, false, false, false, false, false, false, false},
-                {false, false, false, false, false, false, false, false},
-                {false, false, false, false, false, false, false, false},
-                {false, false, false, false, false, false, false, false},
-                {false, false, false, false, false, false, false, false}
-        };
+
         Grid(int row, int col)
         {
             this.row = row;
@@ -154,6 +160,7 @@ public class sequencerFrame
             g.drawString("A", 11, 130);
             g.drawString("B", 11, 80);
             g.drawString("C", 11, 30);
+            seq.createTrack(doa, 0);
 
         }
 

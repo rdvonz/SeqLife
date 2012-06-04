@@ -70,7 +70,6 @@ public class sequencerFrame
                 PointerInfo pi = MouseInfo.getPointerInfo();
                 Point point = new Point(pi.getLocation());
                 SwingUtilities.convertPointFromScreen(point, e.getComponent());
-                System.out.println("("+(int)point.getX()+","+(int)point.getY()+")");
                 mousePos[0] = (int)point.getX();
                 mousePos[1] = (int)point.getY();
                 panel.repaint();

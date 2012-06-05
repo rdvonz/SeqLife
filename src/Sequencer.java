@@ -81,9 +81,7 @@ public class Sequencer{
     }
     public void createTrack(boolean[][] grid, int instrument){
         //Change instrument
-        if(sequence.getTracks().length>0){
-            sequence.deleteTrack(track);
-        }
+        sequence.deleteTrack(track);
         track = sequence.createTrack();
         ShortMessage sm = new ShortMessage( );
         try{

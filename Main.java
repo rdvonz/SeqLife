@@ -11,10 +11,8 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import javax.swing.event.ChangeListener;
-import javax.swing.event.ChangeEvent;
 
-public class sequencerFrame
+public class Main
 {
 
     private JFrame frame;
@@ -40,6 +38,7 @@ public class sequencerFrame
     private final int ROWS = 8;
     private final int COLS = 8;
     private boolean firstPlay = true;
+    private JCheckBox checkBox1;
 
 
     /**
@@ -53,7 +52,7 @@ public class sequencerFrame
             {
                 try
                 {
-                    sequencerFrame window = new sequencerFrame();
+                    Main window = new Main();
                     window.frame.setVisible(true);
                 } catch (Exception e)
                 {
@@ -66,7 +65,7 @@ public class sequencerFrame
     /**
      * Create the application.
      */
-    public sequencerFrame()
+    public Main()
     {
         initialize();
         mousePos = new int[2];
@@ -90,7 +89,7 @@ public class sequencerFrame
         seq = new Sequencer(scale, 0, 128, true);
 
         conway = new Conway(doa);
-        JButton btnExecute = new JButton("Execute");
+        JButton btnExecute = new JButton("execute");
         btnExecute.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent arg0) {
                 //This is the sequence brah
@@ -104,40 +103,6 @@ public class sequencerFrame
         });
         btnExecute.setBounds(525, 11, 89, 23);
         frame.getContentPane().add(btnExecute);
-
-        JButton btnNewButton = new JButton("Stop");
-        btnNewButton.setBounds(525, 36, 89, 23);
-        frame.getContentPane().add(btnNewButton);
-
-        JButton btnNewButton_1 = new JButton("Step");
-        btnNewButton_1.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent arg0)
-            {
-                seq.playSequence();
-                seq.createTrack(doa, 0);
-                conway.setGrid(doa);
-                doa = conway.nextStep();
-                if(!firstPlay) panel.repaint();
-                else firstPlay = false;
-            }
-        });
-        btnNewButton_1.setBounds(525, 59, 89, 23);
-        frame.getContentPane().add(btnNewButton_1);
-
-        final JSpinner spinner = new JSpinner();
-        spinner.addChangeListener(new ChangeListener() {
-            public void stateChanged(ChangeEvent arg0) {
-                seq.setInstrument(Integer.parseInt(spinner.getValue().toString()));
-                System.out.println(spinner.getValue().toString());
-            }
-        });
-        spinner.setModel(new SpinnerNumberModel(0, 0, 128, 1));
-        spinner.setBounds(563, 93, 51, 20);
-        frame.getContentPane().add(spinner);
-
-        JLabel label = new JLabel("#:");
-        label.setBounds(535, 96, 46, 14);
-        frame.getContentPane().add(label);
         panel.setBounds(0,0,CELLWIDTH*ROWS,CELLHEIGHT*COLS);
         panel.setBackground(new java.awt.Color(255,255,255));
 
@@ -194,6 +159,7 @@ public class sequencerFrame
 
 
     }
+
 }
 
 

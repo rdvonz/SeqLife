@@ -12,7 +12,7 @@ import javax.sound.midi.Track;
 public class Sequencer{
     private static int[] scale;
     private int octave;
-    private int instrument;
+    private static int instrument;
     private static Track track;
     private static javax.sound.midi.Sequencer sequencer;
 
@@ -55,15 +55,15 @@ public class Sequencer{
 
         int ticks=0;
         int tickLength=16;
-       // String playing = "Should be playing: ";
+        // String playing = "Should be playing: ";
         for (boolean[] aGrid : grid) {
             for (int col = 0; col < aGrid.length; col++) {
                 if (aGrid[col]) {
                     //playing += scale[row]+" ";
                     off = new ShortMessage();
-                    off.setMessage(ShortMessage.NOTE_OFF, 0, scale[col], velocity);
+                    off.setMessage(ShortMessage.NOTE_OFF, instrument, scale[col], velocity);
                     on = new ShortMessage();
-                    on.setMessage(ShortMessage.NOTE_ON, 0, scale[col], velocity);
+                    on.setMessage(ShortMessage.NOTE_ON, instrument, scale[col], velocity);
                     track.add(new MidiEvent(on, ticks));
                     track.add(new MidiEvent(off, ticks + tickLength));
                 } else {
@@ -85,11 +85,11 @@ public class Sequencer{
         track = sequence.createTrack();
         ShortMessage sm = new ShortMessage( );
         try{
-        sm.setMessage(ShortMessage.PROGRAM_CHANGE, 0, instrument, 0);
-        track.add(new MidiEvent(sm, 0));
-         //Parse the grid
-         //Add notes to sequencer
-         parseSequence(grid);
+            sm.setMessage(ShortMessage.PROGRAM_CHANGE, 0, instrument, 0);
+            track.add(new MidiEvent(sm, 0));
+            //Parse the grid
+            //Add notes to sequencer
+            parseSequence(grid);
         } catch(InvalidMidiDataException e){
             e.printStackTrace();
         }
@@ -104,11 +104,43 @@ public class Sequencer{
         });
         // And start playing now.
         try{
-        sequencer.setSequence(sequence);
-        sequencer.setTickPosition(0);
-        sequencer.start();
+            sequencer.setSequence(sequence);
+            sequencer.setTickPosition(0);
+            sequencer.start();
         } catch(InvalidMidiDataException e){
             e.printStackTrace();
         }
+    }
+    public static int[] getScale()
+    {
+        return scale;
+    }
+    public static void setScale(int[] scale)
+    {
+        Sequencer.scale = scale;
+    }
+    public int getOctave()
+    {
+        return octave;
+    }
+    public void setOctave(int octave)
+    {
+        this.octave = octave;
+    }
+    public int getInstrument()
+    {
+        return instrument;
+    }
+    public void setInstrument(int instrument)
+    {
+        this.instrument = instrument;
+    }
+    public static int getVelocity()
+    {
+        return velocity;
+    }
+    public static void setVelocity(int velocity)
+    {
+        Sequencer.velocity = velocity;
     }
 }

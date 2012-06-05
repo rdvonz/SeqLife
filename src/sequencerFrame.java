@@ -138,6 +138,23 @@ public class sequencerFrame
         JLabel label = new JLabel("#:");
         label.setBounds(535, 96, 46, 14);
         frame.getContentPane().add(label);
+
+        JSlider slider = new JSlider();
+        slider.setBounds(402, 158, 200, 23);
+        frame.getContentPane().add(slider);
+
+        JLabel lblBpm = new JLabel("BPM");
+        lblBpm.setBounds(489, 131, 46, 14);
+        frame.getContentPane().add(lblBpm);
+
+        JComboBox comboBox = new JComboBox();
+        comboBox.setModel(new DefaultComboBoxModel(new String[] {"Cb", "E#"}));
+        comboBox.setBounds(568, 227, 46, 20);
+        frame.getContentPane().add(comboBox);
+
+        JLabel lblScale = new JLabel("Scale:");
+        lblScale.setBounds(525, 230, 46, 14);
+        frame.getContentPane().add(lblScale);
         panel.setBounds(0,0,CELLWIDTH*ROWS,CELLHEIGHT*COLS);
         panel.setBackground(new java.awt.Color(255,255,255));
 

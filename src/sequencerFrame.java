@@ -1,19 +1,14 @@
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.Graphics;
 import java.awt.MouseInfo;
 import java.awt.Point;
 import java.awt.PointerInfo;
 
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
+import javax.swing.*;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import javax.swing.JMenuBar;
-import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
@@ -23,7 +18,7 @@ public class sequencerFrame
     private JFrame frame;
     private static int[] mousePos;
     private static Sequencer seq;
-    private static int[] scale = {50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61};
+    private static int[] scale = {72, 71, 69, 67, 65, 64, 62, 60};
     private static boolean[][] doa={
             {false, false, false, false, false, false, false, false},
             {false, false, false, false, false, false, false, false},
@@ -73,16 +68,16 @@ public class sequencerFrame
     {
         frame = new JFrame();
         frame.setBounds(100, 100, 630, 510);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         final Grid panel = new Grid(8,8);
         frame.getContentPane().add(panel, BorderLayout.CENTER);
         frame.getContentPane().setLayout(null);
-        seq = new Sequencer(doa, 0, scale, 0, 128, true);
-
+        seq = new Sequencer(scale, 0, 128, true);
         JButton btnExecute = new JButton("execute");
         btnExecute.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent arg0) {
                 //This is the sequence brah
+                seq.createTrack(doa, 0);
                 seq.playSequence();
             }
         });
@@ -136,14 +131,7 @@ public class sequencerFrame
 
                     if(isInBounds(iBoundMin, iBoundMax, kBoundMin, kBoundMax))
                     {
-                        if(doa[i][k] ==false)
-                        {
-                            doa[i][k] = true;
-                        }
-                        else
-                        {
-                            doa[i][k] = false;
-                        }
+                        doa[i][k] = !doa[i][k];
 
                     }
                     if(doa[i][k]){
@@ -160,7 +148,6 @@ public class sequencerFrame
             g.drawString("A", 11, 130);
             g.drawString("B", 11, 80);
             g.drawString("C", 11, 30);
-            seq.createTrack(doa, 0);
 
         }
 
@@ -170,14 +157,7 @@ public class sequencerFrame
     {
 
 
-        if(mousePos[0] < xMax && mousePos[0] > xMin && mousePos[1] < yMax && mousePos[1] > yMin )
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
+        return mousePos[0] < xMax && mousePos[0] > xMin && mousePos[1] < yMax && mousePos[1] > yMin;
     }
 
 }

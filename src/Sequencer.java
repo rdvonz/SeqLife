@@ -100,7 +100,6 @@ public class Sequencer{
             public void meta(MetaMessage m) {
                 // A message of this type is automatically sent
                 // when we reach the end of the track
-                if (m.getType( ) == 47) sequencer.stop();
             }
         });
         // And start playing now.

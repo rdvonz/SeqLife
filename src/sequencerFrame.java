@@ -10,12 +10,8 @@ import java.awt.event.MouseEvent;
 public class sequencerFrame {
 
     private JFrame frame;
-    private static int[] mousePos;
-    private static Sequencer seq;
+    // private static int[] mousePos;
     public static Conway conway;
-    //TODO: create an interface for these scales
-    private static int[] cmajscale = {72, 71, 69, 67, 65, 64, 62, 60};
-    private static int[] scale = {61, 63, 66, 68, 70, 75, 78, 68};
     public static boolean[][] doa = {
             {false, false, false, false, false, false, false, false},
             {false, false, false, false, false, false, false, false},
@@ -31,7 +27,9 @@ public class sequencerFrame {
     private final int ROWS = 8;
     private final int COLS = 8;
     private static Grid panel;
-    public static boolean done = false;
+
+    //Create a sequencer
+    Sequencer seq;
 
     /**
      * Launch the application.
@@ -54,7 +52,6 @@ public class sequencerFrame {
      */
     public sequencerFrame() {
         initialize();
-        mousePos = new int[2];
     }
 
     /**
@@ -68,6 +65,10 @@ public class sequencerFrame {
     }
 
     private void initialize() {
+        //Initialize sequencer
+        seq = new Sequencer(0, 128);
+
+
         frame = new JFrame();
         frame.setBounds(100, 100, 630, 510);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -78,17 +79,12 @@ public class sequencerFrame {
         frame.getContentPane().setLayout(null);
 
         panel.setBorder(BorderFactory.createLineBorder(Color.black));
-        //TODO: create a gui interface for the instrument number
-        //TODO: create a gui interface for the bpm
-        //TODO Create a gui interface for the damp pedal
-        //refer to the sequencer class for these values, you may need to make getters and setters, Evan.
-        Sequencer.initialize(scale, 0, 128, true);
 
         JButton btnExecute = new JButton("Execute");
         btnExecute.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent arg0) {
-                Sequencer.parseSequence(sequencerFrame.doa);
-                Sequencer.playSequence();
+                seq.parseSequence(sequencerFrame.doa);
+                seq.playSequence();
             }
         });
         btnExecute.setBounds(525, 11, 89, 23);
@@ -110,7 +106,7 @@ public class sequencerFrame {
         final JSpinner spinner = new JSpinner();
         spinner.addChangeListener(new ChangeListener() {
             public void stateChanged(ChangeEvent arg0) {
-                Sequencer.setInstrument(Integer.parseInt(spinner.getValue().toString()));
+                seq.setInstrument(Integer.parseInt(spinner.getValue().toString()));
             }
         });
         spinner.setModel(new SpinnerNumberModel(0, 0, 128, 1));
@@ -129,8 +125,8 @@ public class sequencerFrame {
         lblBpm.setBounds(489, 131, 46, 14);
         frame.getContentPane().add(lblBpm);
 
-        JComboBox comboBox = new JComboBox();
-        comboBox.setModel(new DefaultComboBoxModel(new String[]{"Cb", "E#"}));
+        JComboBox<String> comboBox = new JComboBox<String>();
+        comboBox.setModel(new DefaultComboBoxModel<String>(new String[]{"Cb", "E#"}));
         comboBox.setBounds(568, 227, 46, 20);
         frame.getContentPane().add(comboBox);
 
@@ -161,10 +157,6 @@ public class sequencerFrame {
     private class Grid extends JPanel {
         int row;
         int col;
-        int iBoundMax;
-        int iBoundMin;
-        int kBoundMax;
-        int kBoundMin;
 
         Grid(int row, int col) {
             this.row = row;

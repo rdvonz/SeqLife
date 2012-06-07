@@ -1,21 +1,13 @@
-import java.awt.BorderLayout;
-import java.awt.EventQueue;
-import java.awt.Graphics;
-import java.awt.MouseInfo;
-import java.awt.Point;
-import java.awt.PointerInfo;
-
 import javax.swing.*;
-
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-import javax.swing.event.ChangeListener;
-import javax.swing.event.ChangeEvent;
 
-public class sequencerFrame
-{
+public class sequencerFrame {
 
     private JFrame frame;
     private static int[] mousePos;
@@ -24,7 +16,7 @@ public class sequencerFrame
     //TODO: create an interface for these scales
     private static int[] cmajscale = {72, 71, 69, 67, 65, 64, 62, 60};
     private static int[] scale = {61, 63, 66, 68, 70, 75, 78, 68};
-    public static boolean[][] doa={
+    public static boolean[][] doa = {
             {false, false, false, false, false, false, false, false},
             {false, false, false, false, false, false, false, false},
             {false, false, false, false, false, false, false, false},
@@ -44,18 +36,13 @@ public class sequencerFrame
     /**
      * Launch the application.
      */
-    public static void main(String[] args)
-    {
-        EventQueue.invokeLater(new Runnable()
-        {
-            public void run()
-            {
-                try
-                {
+    public static void main(String[] args) {
+        EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                try {
                     sequencerFrame window = new sequencerFrame();
                     window.frame.setVisible(true);
-                } catch (Exception e)
-                {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
@@ -65,8 +52,7 @@ public class sequencerFrame
     /**
      * Create the application.
      */
-    public sequencerFrame()
-    {
+    public sequencerFrame() {
         initialize();
         mousePos = new int[2];
     }
@@ -75,18 +61,21 @@ public class sequencerFrame
      * Initialize the contents of the frame.
      */
 
-    public static void refresh(){
+    public static void refresh() {
+        Sequencer.parseSequence(sequencerFrame.doa);
         sequencerFrame.doa = sequencerFrame.conway.nextStep();
         panel.repaint();
+
+
     }
-    private void initialize()
-    {
+
+    private void initialize() {
         frame = new JFrame();
         frame.setBounds(100, 100, 630, 510);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         conway = new Conway(doa);
 
-         panel = new Grid(ROWS,COLS);
+        panel = new Grid(ROWS, COLS);
         frame.getContentPane().add(panel, BorderLayout.CENTER);
         frame.getContentPane().setLayout(null);
         //TODO: create a gui interface for the instrument number
@@ -98,8 +87,8 @@ public class sequencerFrame
         JButton btnExecute = new JButton("Execute");
         btnExecute.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent arg0) {
-                Thread t = new Thread(new Series(scale, 0, 128, true));
-                t.start();
+                Sequencer.parseSequence(sequencerFrame.doa);
+                Sequencer.playSequence();
             }
         });
         btnExecute.setBounds(525, 11, 89, 23);
@@ -111,8 +100,7 @@ public class sequencerFrame
 
         JButton btnNewButton_1 = new JButton("Step");
         btnNewButton_1.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent arg0)
-            {
+            public void actionPerformed(ActionEvent arg0) {
 
             }
         });
@@ -123,7 +111,6 @@ public class sequencerFrame
         spinner.addChangeListener(new ChangeListener() {
             public void stateChanged(ChangeEvent arg0) {
                 Sequencer.setInstrument(Integer.parseInt(spinner.getValue().toString()));
-                System.out.println(spinner.getValue().toString());
             }
         });
         spinner.setModel(new SpinnerNumberModel(0, 0, 128, 1));
@@ -143,27 +130,24 @@ public class sequencerFrame
         frame.getContentPane().add(lblBpm);
 
         JComboBox comboBox = new JComboBox();
-        comboBox.setModel(new DefaultComboBoxModel(new String[] {"Cb", "E#"}));
+        comboBox.setModel(new DefaultComboBoxModel(new String[]{"Cb", "E#"}));
         comboBox.setBounds(568, 227, 46, 20);
         frame.getContentPane().add(comboBox);
 
         JLabel lblScale = new JLabel("Scale:");
         lblScale.setBounds(525, 230, 46, 14);
         frame.getContentPane().add(lblScale);
-        panel.setBounds(0,0,CELLWIDTH*ROWS,CELLHEIGHT*COLS);
-        panel.setBackground(new java.awt.Color(255,255,255));
+        panel.setBounds(0, 0, CELLWIDTH * ROWS, CELLHEIGHT * COLS);
+        panel.setBackground(new java.awt.Color(255, 255, 255));
 
-        frame.getContentPane().addMouseListener(new MouseAdapter()
-        {
+        frame.getContentPane().addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseClicked(MouseEvent e)
-            {
+            public void mouseClicked(MouseEvent e) {
                 PointerInfo pi = MouseInfo.getPointerInfo();
                 Point point = new Point(pi.getLocation());
                 SwingUtilities.convertPointFromScreen(point, panel);
-                int cellX = ((int)point.getX()/CELLWIDTH*COLS)/8;
-                int cellY = ((int)point.getY()/CELLHEIGHT*ROWS)/8;
-                System.out.println(cellX+","+cellY);
+                int cellX = ((int) point.getX() / CELLWIDTH * COLS) / 8;
+                int cellY = ((int) point.getY() / CELLHEIGHT * ROWS) / 8;
                 doa[cellX][cellY] = !doa[cellX][cellY];
                 panel.repaint();
 
@@ -174,8 +158,7 @@ public class sequencerFrame
 
     }
 
-    private class Grid extends JPanel
-    {
+    private class Grid extends JPanel {
         int row;
         int col;
         int iBoundMax;
@@ -183,21 +166,18 @@ public class sequencerFrame
         int kBoundMax;
         int kBoundMin;
 
-        Grid(int row, int col)
-        {
+        Grid(int row, int col) {
             this.row = row;
             this.col = col;
         }
-        public void paintComponent(Graphics g)
-        {
+
+        public void paintComponent(Graphics g) {
             super.paintComponent(g);
-            for(int i=0;i<col;i++)
-            {
-                for(int j=0; j<row;j++)
-                {
-                    g.drawRect(((i*CELLWIDTH)),j*CELLHEIGHT,CELLWIDTH, CELLHEIGHT);
-                    if(doa[i][j]){
-                        g.fillRect(i*CELLWIDTH, j*CELLHEIGHT, CELLWIDTH, CELLHEIGHT);
+            for (int i = 0; i < col; i++) {
+                for (int j = 0; j < row; j++) {
+                    g.drawRect(((i * CELLWIDTH)), j * CELLHEIGHT, CELLWIDTH, CELLHEIGHT);
+                    if (doa[i][j]) {
+                        g.fillRect(i * CELLWIDTH, j * CELLHEIGHT, CELLWIDTH, CELLHEIGHT);
                     }
 
                 }

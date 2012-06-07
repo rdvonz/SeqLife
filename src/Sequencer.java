@@ -1,15 +1,6 @@
-import javax.sound.midi.InvalidMidiDataException;
-import javax.sound.midi.MetaEventListener;
-import javax.sound.midi.MetaMessage;
-import javax.sound.midi.MidiEvent;
-import javax.sound.midi.MidiSystem;
-import javax.sound.midi.MidiUnavailableException;
-import javax.sound.midi.Sequence;
-import javax.sound.midi.ShortMessage;
-import javax.sound.midi.Synthesizer;
-import javax.sound.midi.Track;
+import javax.sound.midi.*;
 
-public class Sequencer{
+public class Sequencer {
     private static int[] scale;
     private static int octave;
     private static int instrument;
@@ -25,7 +16,8 @@ public class Sequencer{
     private static int velocity;
 
     private static Sequence sequence;
-    public static void initialize(int[] scale, int instrument, int tempo, boolean sustain){
+
+    public static void initialize(int[] scale, int instrument, int tempo, boolean sustain) {
         //Set up initial settings for the sequencer
         Sequencer.instrument = instrument;
         Sequencer.scale = scale;
@@ -55,14 +47,14 @@ public class Sequencer{
         }
     }
 
-    public static void parseSequence(boolean[][] grid){
+    public static void parseSequence(boolean[][] grid) {
         ShortMessage on;
         Sequencer.grid = grid;
         ShortMessage off;
-        int tickLength=16;
+        int tickLength = 16;
         //Change instrument
-        ShortMessage sm = new ShortMessage( );
-        try{
+        ShortMessage sm = new ShortMessage();
+        try {
             sm.setMessage(ShortMessage.PROGRAM_CHANGE, 0, instrument, 0);
             track.add(new MidiEvent(sm, 0));
 
@@ -85,65 +77,66 @@ public class Sequencer{
 
             }
 
-        } catch(InvalidMidiDataException e){
+        } catch (InvalidMidiDataException e) {
             e.printStackTrace();
         }
         curTick = ticks - 128;
 
 
-
     }
-    public static void playSequence(){
+
+    public static void playSequence() {
         //Check if sequencer is stopped
 
-        sequencer.addMetaEventListener(new MetaEventListener( ) {
+        sequencer.addMetaEventListener(new MetaEventListener() {
             public void meta(MetaMessage m) {
                 // A message of this type is automatically sent
                 // when we reach the end of the track
-                if (m.getType( ) == 47){
-                    Sequencer.parseSequence(sequencerFrame.doa);
+                if (m.getType() == 47) {
+                    // Restart the song
+                    sequencer.setTickPosition(curTick);
                     sequencerFrame.refresh();
-                    Sequencer.playSequence();
+                    sequencer.start();
+
 
                 }
             }
         });
         // And start playing now.
-        try{
+        try {
             sequencer.setSequence(sequence);
-            sequencer.setTickPosition(curTick);
             sequencer.start();
-        } catch(InvalidMidiDataException e){
+
+        } catch (InvalidMidiDataException e) {
             e.printStackTrace();
         }
     }
-    public static int[] getScale()
-    {
+
+    public static int[] getScale() {
         return scale;
     }
-    public static void setScale(int[] scale)
-    {
+
+    public static void setScale(int[] scale) {
         Sequencer.scale = scale;
     }
-    public static int getOctave()
-    {
+
+    public static int getOctave() {
         return octave;
     }
 
-    public static int getInstrument()
-    {
+    public static int getInstrument() {
         return instrument;
     }
-    public static void  setInstrument(int instrument){
+
+    public static void setInstrument(int instrument) {
         Sequencer.instrument = instrument;
     }
 
-    public  static int getVelocity()
-    {
+    public static int getVelocity() {
         return velocity;
     }
-    public static void setVelocity(int velocity)
-    {
+
+    public static void setVelocity(int velocity) {
         Sequencer.velocity = velocity;
     }
 }

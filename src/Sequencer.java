@@ -52,21 +52,19 @@ public class Sequencer {
         Sequencer.grid = grid;
         ShortMessage off;
         int tickLength = 16;
-        //Change instrument
-        ShortMessage sm = new ShortMessage();
         try {
-            sm.setMessage(ShortMessage.PROGRAM_CHANGE, 0, instrument, 0);
+            ShortMessage sm = new ShortMessage();
+            sm.setMessage(ShortMessage.PROGRAM_CHANGE, 0, Sequencer.instrument, 0);
             track.add(new MidiEvent(sm, 0));
-
             //Parse grid for notes
             for (boolean[] aGrid : Sequencer.grid) {
                 for (int col = 0; col < aGrid.length; col++) {
                     if (aGrid[col]) {
                         //playing += scale[row]+" ";
                         off = new ShortMessage();
-                        off.setMessage(ShortMessage.NOTE_OFF, instrument, scale[col], velocity);
+                        off.setMessage(ShortMessage.NOTE_OFF, 0, scale[col], velocity);
                         on = new ShortMessage();
-                        on.setMessage(ShortMessage.NOTE_ON, instrument, scale[col], velocity);
+                        on.setMessage(ShortMessage.NOTE_ON, 0, scale[col], velocity);
                         track.add(new MidiEvent(on, ticks));
                         track.add(new MidiEvent(off, ticks + tickLength));
                     }
@@ -133,11 +131,18 @@ public class Sequencer {
     }
 
     public static void setInstrument(int instrument) {
+        //Change instrument
+
         Sequencer.instrument = instrument;
+
     }
 
     public static int getVelocity() {
         return velocity;
+    }
+
+    public static void setTempo(int tempo) {
+        Sequencer.setTempo(tempo);
     }
 
     public static void setVelocity(int velocity) {

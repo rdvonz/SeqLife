@@ -26,8 +26,8 @@ public class sequencerFrame {
             {false, false, false, false, false, false, false, false},
             {false, false, false, false, false, false, false, false}
     };
-    private final int CELLWIDTH = 25;
-    private final int CELLHEIGHT = 25;
+    private final int CELLWIDTH = 50;
+    private final int CELLHEIGHT = 50;
     private final int ROWS = 8;
     private final int COLS = 8;
     private static Grid panel;
@@ -76,6 +76,8 @@ public class sequencerFrame {
         panel = new Grid(ROWS, COLS);
         frame.getContentPane().add(panel, BorderLayout.CENTER);
         frame.getContentPane().setLayout(null);
+
+        panel.setBorder(BorderFactory.createLineBorder(Color.black));
         //TODO: create a gui interface for the instrument number
         //TODO: create a gui interface for the bpm
         //TODO Create a gui interface for the damp pedal
@@ -119,7 +121,7 @@ public class sequencerFrame {
         label.setBounds(535, 96, 46, 14);
         frame.getContentPane().add(label);
 
-        JSlider slider = new JSlider();
+        final JSlider slider = new JSlider();
         slider.setBounds(402, 158, 200, 23);
         frame.getContentPane().add(slider);
 

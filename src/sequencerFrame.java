@@ -67,7 +67,7 @@ public class sequencerFrame {
     private void initialize() {
         //Initialize sequencer
         seq = new Sequencer(0, 128);
-
+        seq.setScale(Sequencer.MIXOLYDIAN);
 
         frame = new JFrame();
         frame.setBounds(100, 100, 630, 510);

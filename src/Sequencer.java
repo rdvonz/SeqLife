@@ -6,8 +6,6 @@ public class Sequencer {
     boolean[][] grid;
     private static int ticks;
     private static int tempo;
-
-    //private static int[] cmajscale = {72, 71, 69, 67, 65, 64, 62, 60};
     private int[] scale = {61, 63, 66, 68, 70, 75, 78, 68};
 
     private static javax.sound.midi.Sequencer sequencer;
@@ -15,6 +13,24 @@ public class Sequencer {
     private static int velocity;
 
     private Sequence sequence;
+
+    //Scale constants
+    public static final int BIYU = 0;
+    public static final int BLUES = 1;
+    public static final int BLUESDIMINISHED = 3;
+    public static final int DORIAN = 4;
+    public static final int FULLMINOR = 5;
+    public static final int HARMONICMAJOR = 6;
+    public static final int HAWAIIAN = 7;
+    public static final int IONIANSHARP = 9;
+    public static final int JAZZMINOR = 10;
+    public static final int LYDIAN = 11;
+    public static final int MAJOR = 12;
+    public static final int MIXOLYDIAN = 13;
+    public static final int ORIENTAL = 14;
+    public static final int SUPERLOCRIAN = 15;
+    public static final int VERDIENIGMATICASCENDING = 16;
+    public static final int ZIRAFKEND = 17;
 
     public Sequencer(int instrument, int tempo) {
         //Set up initial settings for the sequencer
@@ -118,5 +134,40 @@ public class Sequencer {
 
     public void setTempo(int tempo) {
         this.tempo = tempo;
+    }
+
+    public void setScale(int scale) {
+        //AAAAAAAHHHHHHHHHH
+        if (scale == Sequencer.BIYU) {
+            this.scale = new int[]{24, 27, 31, 34, 36, 39, 43, 46, 48, 51, 55, 58, 60, 63, 67, 70, 72, 75, 79, 82, 84, 87, 91, 94, 96, 99, 103, 106, 108, 111, 115, 118};
+        } else if (scale == Sequencer.BLUES) {
+            this.scale = new int[]{41, 42, 43, 46, 48, 51, 53, 54, 55, 58, 60, 63, 65, 66, 67, 70, 72, 75, 77, 78, 79, 82, 84, 87, 89, 90, 91, 94, 96, 99, 101, 102};
+        } else if (scale == Sequencer.BLUESDIMINISHED) {
+            this.scale = new int[]{48, 49, 51, 52, 54, 55, 56, 58, 60, 61, 63, 64, 66, 67, 68, 70, 72, 73, 75, 76, 78, 79, 80, 82, 84, 85, 87, 88, 90, 91, 92, 94};
+        } else if (scale == Sequencer.DORIAN) {
+            this.scale = new int[]{25, 27, 30, 32, 34, 37, 39, 42, 44, 46, 49, 51, 54, 56, 58, 61, 63, 66, 68, 70, 73, 75, 78, 80, 82, 85, 87, 90, 92, 94, 97, 99};
+        } else if (scale == Sequencer.FULLMINOR) {
+            this.scale = new int[]{51, 53, 55, 56, 57, 58, 59, 60, 62, 63, 65, 67, 68, 69, 70, 71, 72, 74, 75, 77, 79, 80, 81, 82, 83, 84, 86, 87, 89, 91, 92, 93};
+        } else if (scale == Sequencer.HARMONICMAJOR) {
+            this.scale = new int[]{44, 47, 48, 50, 52, 53, 55, 56, 59, 60, 62, 64, 65, 67, 68, 71, 72, 74, 76, 77, 79, 80, 83, 84, 86, 88, 89, 91, 92, 95, 96, 98};
+        } else if (scale == Sequencer.HAWAIIAN) {
+            this.scale = new int[]{39, 43, 45, 47, 48, 50, 51, 55, 57, 59, 60, 62, 63, 67, 69, 71, 72, 74, 75, 79, 81, 83, 84, 86, 87, 91, 93, 95, 96, 98, 99, 103};
+        } else if (scale == Sequencer.IONIANSHARP) {
+            this.scale = new int[]{45, 47, 48, 50, 52, 53, 56, 57, 59, 60, 62, 64, 65, 68, 69, 71, 72, 74, 76, 77, 80, 81, 83, 84, 86, 88, 89, 92, 93, 95, 96, 98};
+        } else if (scale == Sequencer.JAZZMINOR) {
+            this.scale = new int[]{45, 47, 48, 50, 51, 53, 55, 57, 59, 60, 62, 63, 65, 67, 69, 71, 72, 74, 75, 77, 79, 81, 83, 84, 86, 87, 89, 91, 93, 95, 96, 98};
+        } else if (scale == Sequencer.LYDIAN) {
+            this.scale = new int[]{43, 45, 48, 50, 51, 52, 54, 55, 57, 60, 62, 63, 64, 66, 67, 69, 72, 74, 75, 76, 78, 79, 81, 84, 86, 87, 88, 90, 91, 93, 96, 98};
+        } else if (scale == Sequencer.MIXOLYDIAN) {
+            this.scale = new int[]{45, 46, 48, 50, 52, 53, 55, 57, 58, 60, 62, 64, 65, 67, 69, 70, 72, 74, 76, 77, 79, 81, 82, 84, 86, 88, 89, 91, 93, 94, 96, 98};
+        } else if (scale == Sequencer.ORIENTAL) {
+            this.scale = new int[]{45, 46, 48, 49, 52, 53, 54, 57, 58, 60, 61, 64, 65, 66, 69, 70, 72, 73, 76, 77, 78, 81, 82, 84, 85, 88, 89, 90, 93, 94, 96, 97};
+        } else if (scale == Sequencer.SUPERLOCRIAN) {
+            this.scale = new int[]{44, 46, 48, 49, 51, 52, 54, 56, 58, 60, 61, 63, 64, 66, 68, 70, 72, 73, 75, 76, 78, 80, 82, 84, 85, 87, 88, 90, 92, 94, 96, 97};
+        } else if (scale == Sequencer.VERDIENIGMATICASCENDING) {
+            this.scale = new int[]{46, 47, 48, 49, 52, 54, 56, 58, 59, 60, 61, 64, 66, 68, 70, 71, 72, 73, 76, 78, 80, 82, 83, 84, 85, 88, 90, 92, 94, 95, 96, 97};
+        } else if (scale == Sequencer.ZIRAFKEND) {
+            this.scale = new int[]{48, 50, 51, 53, 55, 56, 57, 59, 60, 62, 63, 65, 67, 68, 69, 71, 72, 74, 75, 77, 79, 80, 81, 83, 84, 86, 87, 89, 91, 92, 93, 95};
+        }
     }
 }

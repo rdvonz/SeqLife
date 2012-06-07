@@ -11,23 +11,29 @@ import javax.sound.midi.Track;
 
 public class Sequencer{
     private static int[] scale;
-    private int octave;
+    private static int octave;
     private static int instrument;
     private static Track track;
+    private static int curTick;
+    private static int newTick;
+    static boolean[][] grid;
+    private static int ticks;
+
     private static javax.sound.midi.Sequencer sequencer;
 
-    private int noteLength;
+    private static int noteLength;
     private static int velocity;
 
-    private Sequence sequence;
-
-
-    public Sequencer(int[] scale, int instrument, int tempo, boolean sustain){
+    private static Sequence sequence;
+    public static void initialize(int[] scale, int instrument, int tempo, boolean sustain){
         //Set up initial settings for the sequencer
-        this.instrument = instrument;
+        Sequencer.instrument = instrument;
         Sequencer.scale = scale;
         boolean sustain1 = sustain;
         Synthesizer synth;
+        curTick = 0;
+        newTick = 0;
+        ticks = 0;
         noteLength = 16; //Quarter notes
         velocity = 64; //Mid volume
 
@@ -48,64 +54,64 @@ public class Sequencer{
             e.printStackTrace();
         }
     }
-    private static void parseSequence(boolean[][] grid) throws InvalidMidiDataException{
-        //Iterate over grid in order to parse into midi track
+
+    public static void parseSequence(boolean[][] grid){
         ShortMessage on;
+        Sequencer.grid = grid;
         ShortMessage off;
-
-        int ticks=0;
         int tickLength=16;
-        // String playing = "Should be playing: ";
-        for (boolean[] aGrid : grid) {
-            for (int col = 0; col < aGrid.length; col++) {
-                if (aGrid[col]) {
-                    //playing += scale[row]+" ";
-                    off = new ShortMessage();
-                    off.setMessage(ShortMessage.NOTE_OFF, instrument, scale[col], velocity);
-                    on = new ShortMessage();
-                    on.setMessage(ShortMessage.NOTE_ON, instrument, scale[col], velocity);
-                    track.add(new MidiEvent(on, ticks));
-                    track.add(new MidiEvent(off, ticks + tickLength));
-                } else {
-                    //on.setMessage(ShortMessage.NOTE_ON,  0, 0, velocity);
-                    // off.setMessage(ShortMessage.NOTE_OFF, 0, 0, velocity);
-                    //track.add(new MidiEvent(on, ticks));
-                    //track.add(new MidiEvent(off, ticks+tickLength));
-                }
-            }
-            // playing+="\nthen: ";
-            ticks += tickLength;
-        }
-
-
-    }
-    public void createTrack(boolean[][] grid, int instrument){
         //Change instrument
-        sequence.deleteTrack(track);
-        track = sequence.createTrack();
         ShortMessage sm = new ShortMessage( );
         try{
             sm.setMessage(ShortMessage.PROGRAM_CHANGE, 0, instrument, 0);
             track.add(new MidiEvent(sm, 0));
-            //Parse the grid
-            //Add notes to sequencer
-            parseSequence(grid);
+
+            //Parse grid for notes
+            for (boolean[] aGrid : Sequencer.grid) {
+                for (int col = 0; col < aGrid.length; col++) {
+                    if (aGrid[col]) {
+                        //playing += scale[row]+" ";
+                        off = new ShortMessage();
+                        off.setMessage(ShortMessage.NOTE_OFF, instrument, scale[col], velocity);
+                        on = new ShortMessage();
+                        on.setMessage(ShortMessage.NOTE_ON, instrument, scale[col], velocity);
+                        track.add(new MidiEvent(on, ticks));
+                        track.add(new MidiEvent(off, ticks + tickLength));
+                    }
+
+                }
+                ticks += tickLength;
+
+
+            }
+
         } catch(InvalidMidiDataException e){
             e.printStackTrace();
         }
+        curTick = ticks - 128;
+
+
+
     }
-    public void playSequence(){
+    public static void playSequence(){
         //Check if sequencer is stopped
+
         sequencer.addMetaEventListener(new MetaEventListener( ) {
             public void meta(MetaMessage m) {
                 // A message of this type is automatically sent
                 // when we reach the end of the track
+                if (m.getType( ) == 47){
+                    Sequencer.parseSequence(sequencerFrame.doa);
+                    sequencerFrame.refresh();
+                    Sequencer.playSequence();
+
+                }
             }
         });
         // And start playing now.
         try{
             sequencer.setSequence(sequence);
-            sequencer.setTickPosition(0);
+            sequencer.setTickPosition(curTick);
             sequencer.start();
         } catch(InvalidMidiDataException e){
             e.printStackTrace();
@@ -119,23 +125,20 @@ public class Sequencer{
     {
         Sequencer.scale = scale;
     }
-    public int getOctave()
+    public static int getOctave()
     {
         return octave;
     }
-    public void setOctave(int octave)
-    {
-        this.octave = octave;
-    }
-    public int getInstrument()
+
+    public static int getInstrument()
     {
         return instrument;
     }
-    public void setInstrument(int instrument)
-    {
-        this.instrument = instrument;
+    public static void  setInstrument(int instrument){
+        Sequencer.instrument = instrument;
     }
-    public static int getVelocity()
+
+    public  static int getVelocity()
     {
         return velocity;
     }

@@ -20,10 +20,11 @@ public class sequencerFrame
     private JFrame frame;
     private static int[] mousePos;
     private static Sequencer seq;
+    public static Conway conway;
     //TODO: create an interface for these scales
     private static int[] cmajscale = {72, 71, 69, 67, 65, 64, 62, 60};
-    private static int[] scale = {61, 63, 66, 68, 70, 75, 78, 8};
-    private static boolean[][] doa={
+    private static int[] scale = {61, 63, 66, 68, 70, 75, 78, 68};
+    public static boolean[][] doa={
             {false, false, false, false, false, false, false, false},
             {false, false, false, false, false, false, false, false},
             {false, false, false, false, false, false, false, false},
@@ -33,14 +34,12 @@ public class sequencerFrame
             {false, false, false, false, false, false, false, false},
             {false, false, false, false, false, false, false, false}
     };
-
-    private Conway conway;
     private final int CELLWIDTH = 50;
     private final int CELLHEIGHT = 50;
     private final int ROWS = 8;
     private final int COLS = 8;
-    private boolean firstPlay = true;
-
+    private static Grid panel;
+    public static boolean done = false;
 
     /**
      * Launch the application.
@@ -75,31 +74,32 @@ public class sequencerFrame
     /**
      * Initialize the contents of the frame.
      */
+
+    public static void refresh(){
+        sequencerFrame.doa = sequencerFrame.conway.nextStep();
+        panel.repaint();
+    }
     private void initialize()
     {
         frame = new JFrame();
         frame.setBounds(100, 100, 630, 510);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        final Grid panel = new Grid(ROWS,COLS);
+        conway = new Conway(doa);
+
+         panel = new Grid(ROWS,COLS);
         frame.getContentPane().add(panel, BorderLayout.CENTER);
         frame.getContentPane().setLayout(null);
         //TODO: create a gui interface for the instrument number
         //TODO: create a gui interface for the bpm
         //TODO Create a gui interface for the damp pedal
         //refer to the sequencer class for these values, you may need to make getters and setters, Evan.
-        seq = new Sequencer(scale, 0, 128, true);
+        Sequencer.initialize(scale, 0, 128, true);
 
-        conway = new Conway(doa);
         JButton btnExecute = new JButton("Execute");
         btnExecute.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent arg0) {
-                //This is the sequence brah
-                seq.playSequence();
-                seq.createTrack(doa, 0);
-                conway.setGrid(doa);
-                doa = conway.nextStep();
-                if(!firstPlay) panel.repaint();
-                else firstPlay = false;
+                Thread t = new Thread(new Series(scale, 0, 128, true));
+                t.start();
             }
         });
         btnExecute.setBounds(525, 11, 89, 23);
@@ -113,12 +113,7 @@ public class sequencerFrame
         btnNewButton_1.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent arg0)
             {
-                seq.playSequence();
-                seq.createTrack(doa, 0);
-                conway.setGrid(doa);
-                doa = conway.nextStep();
-                if(!firstPlay) panel.repaint();
-                else firstPlay = false;
+
             }
         });
         btnNewButton_1.setBounds(525, 59, 89, 23);
@@ -127,7 +122,7 @@ public class sequencerFrame
         final JSpinner spinner = new JSpinner();
         spinner.addChangeListener(new ChangeListener() {
             public void stateChanged(ChangeEvent arg0) {
-                seq.setInstrument(Integer.parseInt(spinner.getValue().toString()));
+                Sequencer.setInstrument(Integer.parseInt(spinner.getValue().toString()));
                 System.out.println(spinner.getValue().toString());
             }
         });

@@ -118,6 +118,14 @@ public class sequencerFrame {
         frame.getContentPane().add(label);
 
         final JSlider slider = new JSlider();
+        slider.setMaximum(256);
+        slider.setMinimum(64);
+        slider.addChangeListener(new ChangeListener() {
+            public void stateChanged(ChangeEvent arg0)
+            {
+                seq.setTempo(slider.getValue());
+            }
+        });
         slider.setBounds(402, 158, 200, 23);
         frame.getContentPane().add(slider);
 
@@ -125,8 +133,8 @@ public class sequencerFrame {
         lblBpm.setBounds(489, 131, 46, 14);
         frame.getContentPane().add(lblBpm);
 
-        JComboBox<String> comboBox = new JComboBox<String>();
-        comboBox.setModel(new DefaultComboBoxModel<String>(new String[]{"Cb", "E#"}));
+        JComboBox comboBox = new JComboBox();
+        comboBox.setModel(new DefaultComboBoxModel(new String[]{"Cb", "E#"}));
         comboBox.setBounds(568, 227, 46, 20);
         frame.getContentPane().add(comboBox);
 

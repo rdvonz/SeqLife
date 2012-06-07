@@ -26,8 +26,8 @@ public class sequencerFrame {
             {false, false, false, false, false, false, false, false},
             {false, false, false, false, false, false, false, false}
     };
-    private final int CELLWIDTH = 50;
-    private final int CELLHEIGHT = 50;
+    private final int CELLWIDTH = 25;
+    private final int CELLHEIGHT = 25;
     private final int ROWS = 8;
     private final int COLS = 8;
     private static Grid panel;
@@ -62,8 +62,6 @@ public class sequencerFrame {
      */
 
     public static void refresh() {
-        Sequencer.parseSequence(sequencerFrame.doa);
-        sequencerFrame.doa = sequencerFrame.conway.nextStep();
         panel.repaint();
 
 

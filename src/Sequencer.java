@@ -94,12 +94,16 @@ public class Sequencer {
                 // when we reach the end of the track
                 if (m.getType() == 47) {
                     // Restart the song
-                    sequencer.setTickPosition(curTick);
+                    sequencerFrame.doa = sequencerFrame.conway.nextStep();
+                    Sequencer.parseSequence(sequencerFrame.doa);
+                    //sequencer.setTickPosition(curTick);
                     sequencerFrame.refresh();
+
                     sequencer.start();
 
 
                 }
+
             }
         });
         // And start playing now.

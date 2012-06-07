@@ -71,9 +71,9 @@ public class Sequencer {
                 for (int col = 0; col < aGrid.length; col++) {
                     if (aGrid[col]) {
                         off = new ShortMessage();
-                        off.setMessage(ShortMessage.NOTE_OFF, 0, scale[grid[0].length - col - 1], velocity);
+                        off.setMessage(ShortMessage.NOTE_OFF, 0, scale[(grid[0].length - col - 1)%scale.length], velocity);
                         on = new ShortMessage();
-                        on.setMessage(ShortMessage.NOTE_ON, 0, scale[grid[0].length - col - 1], velocity);
+                        on.setMessage(ShortMessage.NOTE_ON, 0, scale[(grid[0].length - col - 1)%scale.length], velocity);
                         track.add(new MidiEvent(on, ticks));
                         track.add(new MidiEvent(off, ticks + tickLength));
                     }

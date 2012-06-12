@@ -4,7 +4,7 @@ public class Sequencer {
     private static int instrument;
     private Track track;
     private int other = 0;
-    boolean[][] grid;
+    static boolean[][] grid;
     private static int ticks;
     private static int tempo;
     private int[] scale = {61, 63, 66, 68, 70, 75, 78, 68};
@@ -142,6 +142,17 @@ public class Sequencer {
         this.tempo = tempo;
     }
 
+    public static int getPosition() {
+        return (int) sequencer.getTickPosition() / 16;
+    }
+
+    public static boolean getBool(int x, int y) {
+        if (grid != null) {
+            return grid[x][y];
+        }
+        return false;
+    }
+
     public void setScale(int scale) {
         //AAAAAAAHHHHHHHHHH
         if (scale == Sequencer.BIYU) {
@@ -176,4 +187,6 @@ public class Sequencer {
             this.scale = new int[]{48, 50, 51, 53, 55, 56, 57, 59, 60, 62, 63, 65, 67, 68, 69, 71, 72, 74, 75, 77, 79, 80, 81, 83, 84, 86, 87, 89, 91, 92, 93, 95};
         }
     }
+
+
 }

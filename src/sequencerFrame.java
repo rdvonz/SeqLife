@@ -6,6 +6,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class sequencerFrame {
 
@@ -13,12 +15,16 @@ public class sequencerFrame {
     // private static int[] mousePos;
     public static Conway conway;
     public static boolean[][] doa;
-    private final int CELLWIDTH = 20;
-    private final int CELLHEIGHT = 20;
-    private final int ROWS = 25;
-    private final int COLS = 10;
+    private final int CELLWIDTH = 50;
+    private final int CELLHEIGHT = 50;
+    private final int ROWS = 8;
+    private final int COLS = 8;
     private static Grid panel;
 
+    private JButton btnStart;
+    private Timer timer;
+    private JComboBox comboBox_1;
+    private String[] ports = new String[]{""};
     //Create a sequencer
     Sequencer seq;
 
@@ -26,6 +32,14 @@ public class sequencerFrame {
      * Launch the application.
      */
     public static void main(String[] args) {
+        try {
+            UIManager.setLookAndFeel(
+                    UIManager.getSystemLookAndFeelClassName());
+        } catch (UnsupportedLookAndFeelException e) {
+        } catch (ClassNotFoundException e) {
+        } catch (InstantiationException e) {
+        } catch (IllegalAccessException e) {
+        }
         EventQueue.invokeLater(new Runnable() {
             public void run() {
                 try {
@@ -88,6 +102,31 @@ public class sequencerFrame {
                 seq.playSequence();
             }
         });
+
+        comboBox_1 = new JComboBox();
+        comboBox_1.setBounds(547, 258, 67, 20);
+        frame.getContentPane().add(comboBox_1);
+
+        timer = new Timer();
+        timer.scheduleAtFixedRate(new pollPorts(), 0, 500);
+
+        btnStart = new JButton("Start");
+        btnStart.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent arg0) {
+                if (Visualizer.isRunning()) {
+                    Visualizer.stop();
+                    btnStart.setText("Start");
+                } else {
+                    if (comboBox_1.getModel().getSize() > 0) {
+                        Visualizer.start((String) comboBox_1.getSelectedItem());
+                        btnStart.setText("Stop");
+                    }
+                }
+            }
+        });
+
+        btnStart.setBounds(525, 283, 89, 23);
+        frame.getContentPane().add(btnStart);
         btnExecute.setBounds(20, COLS * CELLHEIGHT + 20, 89, 23);
         frame.getContentPane().add(btnExecute);
 
@@ -238,6 +277,31 @@ public class sequencerFrame {
 
 
     }
+
+    public class pollPorts extends TimerTask {
+        public void run() {
+            String[] temp = Visualizer.getPorts();
+            boolean notMatched = false;
+            if (temp.length != ports.length) {
+                notMatched = true;
+            } else {
+                for (int i = 0; i < temp.length; i++) {
+                    if (ports[i].compareTo(temp[i]) != 0) {
+                        notMatched = true;
+                    }
+                }
+            }
+            if (notMatched) {
+                //System.out.println("change");
+                ports = temp;
+                DefaultComboBoxModel model = new DefaultComboBoxModel(ports);
+                comboBox_1.setModel(model);
+            }
+        }
+
+    }
+
+
 }
 
 

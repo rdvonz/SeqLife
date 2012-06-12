@@ -3,6 +3,7 @@ import javax.sound.midi.*;
 public class Sequencer {
     private static int instrument;
     private Track track;
+    private int other = 0;
     boolean[][] grid;
     private static int ticks;
     private static int tempo;
@@ -70,10 +71,15 @@ public class Sequencer {
             for (boolean[] aGrid : grid) {
                 for (int col = 0; col < aGrid.length; col++) {
                     if (aGrid[col]) {
+                        if (other == 1) {
+                            other = 0;
+                        } else {
+                            other = 1;
+                        }
                         off = new ShortMessage();
-                        off.setMessage(ShortMessage.NOTE_OFF, 0, scale[(grid[0].length - col - 1)%scale.length], velocity);
+                        off.setMessage(ShortMessage.NOTE_OFF, 0, scale[(grid[0].length - col - 1 + other) % scale.length], velocity);
                         on = new ShortMessage();
-                        on.setMessage(ShortMessage.NOTE_ON, 0, scale[(grid[0].length - col - 1)%scale.length], velocity);
+                        on.setMessage(ShortMessage.NOTE_ON, 0, scale[(grid[0].length - col - 1 + other) % scale.length], velocity);
                         track.add(new MidiEvent(on, ticks));
                         track.add(new MidiEvent(off, ticks + tickLength));
                     }

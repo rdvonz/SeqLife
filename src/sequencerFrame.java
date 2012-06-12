@@ -13,10 +13,10 @@ public class sequencerFrame {
     // private static int[] mousePos;
     public static Conway conway;
     public static boolean[][] doa;
-    private final int CELLWIDTH = 15;
-    private final int CELLHEIGHT = 15;
-    private final int ROWS = 20;
-    private final int COLS = 20;
+    private final int CELLWIDTH = 20;
+    private final int CELLHEIGHT = 20;
+    private final int ROWS = 25;
+    private final int COLS = 10;
     private static Grid panel;
 
     //Create a sequencer
@@ -45,9 +45,9 @@ public class sequencerFrame {
         initialize();
     }
 
-    public void initGrid(){
-        for(int i = 0; i<ROWS; i++){
-            for(int j = 0; j<COLS; j++){
+    public void initGrid() {
+        for (int i = 0; i < ROWS; i++) {
+            for (int j = 0; j < COLS; j++) {
                 doa[i][j] = false;
             }
         }
@@ -88,20 +88,20 @@ public class sequencerFrame {
                 seq.playSequence();
             }
         });
-        btnExecute.setBounds(525, 11, 89, 23);
+        btnExecute.setBounds(20, COLS * CELLHEIGHT + 20, 89, 23);
         frame.getContentPane().add(btnExecute);
 
         JButton btnNewButton = new JButton("Stop");
-        btnNewButton.setBounds(525, 36, 89, 23);
+        btnNewButton.setBounds(20, COLS * CELLHEIGHT + 23 + 20, 89, 23);
         frame.getContentPane().add(btnNewButton);
 
         JButton btnNewButton_1 = new JButton("Step");
         btnNewButton_1.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent arg0) {
-
+                seq.setTempo(0);
             }
         });
-        btnNewButton_1.setBounds(525, 59, 89, 23);
+        btnNewButton_1.setBounds(20, COLS * CELLHEIGHT + 46 + 20, 89, 23);
         frame.getContentPane().add(btnNewButton_1);
 
         final JSpinner spinner = new JSpinner();
@@ -111,19 +111,18 @@ public class sequencerFrame {
             }
         });
         spinner.setModel(new SpinnerNumberModel(0, 0, 128, 1));
-        spinner.setBounds(563, 93, 51, 20);
+        spinner.setBounds(0, COLS * CELLHEIGHT + 23 * 3 + 20, 51, 20);
         frame.getContentPane().add(spinner);
 
         JLabel label = new JLabel("#:");
-        label.setBounds(535, 96, 46, 14);
+        label.setBounds(0, COLS * CELLHEIGHT + 23 * 4 + 20, 46, 14);
         frame.getContentPane().add(label);
 
         final JSlider slider = new JSlider();
         slider.setMaximum(256);
         slider.setMinimum(64);
         slider.addChangeListener(new ChangeListener() {
-            public void stateChanged(ChangeEvent arg0)
-            {
+            public void stateChanged(ChangeEvent arg0) {
                 seq.setTempo(slider.getValue());
             }
         });
@@ -136,75 +135,58 @@ public class sequencerFrame {
 
         final JComboBox comboBox = new JComboBox();
         comboBox.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent arg0)
-            {
-                if(comboBox.getSelectedIndex() ==0)
-                {
+            public void actionPerformed(ActionEvent arg0) {
+                if (comboBox.getSelectedIndex() == 0) {
                     seq.setScale(Sequencer.BIYU);
                 }
-                if(comboBox.getSelectedIndex() ==1)
-                {
+                if (comboBox.getSelectedIndex() == 1) {
                     seq.setScale(Sequencer.BLUES);
                 }
-                if(comboBox.getSelectedIndex() ==2)
-                {
+                if (comboBox.getSelectedIndex() == 2) {
                     seq.setScale(Sequencer.BLUESDIMINISHED);
                 }
-                if(comboBox.getSelectedIndex() ==3)
-                {
+                if (comboBox.getSelectedIndex() == 3) {
                     seq.setScale(Sequencer.DORIAN);
                 }
-                if(comboBox.getSelectedIndex() ==4)
-                {
+                if (comboBox.getSelectedIndex() == 4) {
                     seq.setScale(Sequencer.FULLMINOR);
                 }
-                if(comboBox.getSelectedIndex() ==5)
-                {
+                if (comboBox.getSelectedIndex() == 5) {
                     seq.setScale(Sequencer.HARMONICMAJOR);
                 }
-                if(comboBox.getSelectedIndex() ==6)
-                {
+                if (comboBox.getSelectedIndex() == 6) {
                     seq.setScale(Sequencer.HAWAIIAN);
                 }
-                if(comboBox.getSelectedIndex() ==7)
-                {
+                if (comboBox.getSelectedIndex() == 7) {
                     seq.setScale(Sequencer.IONIANSHARP);
                 }
-                if(comboBox.getSelectedIndex() ==8)
-                {
+                if (comboBox.getSelectedIndex() == 8) {
                     seq.setScale(Sequencer.JAZZMINOR);
                 }
-                if(comboBox.getSelectedIndex() ==9)
-                {
+                if (comboBox.getSelectedIndex() == 9) {
                     seq.setScale(Sequencer.LYDIAN);
                 }
-                if(comboBox.getSelectedIndex() ==10)
-                {
+                if (comboBox.getSelectedIndex() == 10) {
                     seq.setScale(Sequencer.MAJOR);
                 }
-                if(comboBox.getSelectedIndex() ==11)
-                {
+                if (comboBox.getSelectedIndex() == 11) {
                     seq.setScale(Sequencer.MIXOLYDIAN);
                 }
-                if(comboBox.getSelectedIndex() ==12)
-                {
+                if (comboBox.getSelectedIndex() == 12) {
                     seq.setScale(Sequencer.ORIENTAL);
                 }
-                if(comboBox.getSelectedIndex() ==13)
-                {
+                if (comboBox.getSelectedIndex() == 13) {
                     seq.setScale(Sequencer.SUPERLOCRIAN);
                 }
-                if(comboBox.getSelectedIndex() ==14)
-                {
+                if (comboBox.getSelectedIndex() == 14) {
                     seq.setScale(Sequencer.VERDIENIGMATICASCENDING);
                 }
-                if(comboBox.getSelectedIndex() ==15)
-                {
+                if (comboBox.getSelectedIndex() == 15) {
                     seq.setScale(Sequencer.ZIRAFKEND);
                 }
             }
         });
-        comboBox.setModel(new DefaultComboBoxModel(new String[] {"Biyu", "Blues", "BluesDiminished", "Dorian", "FullMinor", "HarmonicMajor", "Hawaiian", "IonianSharp", "JazzMinor", "Lydian", "Major", "MixoLydian", "Oriental", "Superlocrian", "VerdienigmaticAscending", "Zirafkend"}));
+        comboBox.setModel(new DefaultComboBoxModel(new String[]{"Biyu", "Blues", "BluesDiminished", "Dorian", "FullMinor", "HarmonicMajor", "Hawaiian", "IonianSharp", "JazzMinor", "Lydian", "Major", "MixoLydian", "Oriental", "Superlocrian", "VerdienigmaticAscending", "Zirafkend"}));
         comboBox.setBounds(444, 227, 170, 20);
         frame.getContentPane().add(comboBox);
 
